@@ -1,4 +1,4 @@
-import { View, SafeAreaView,Text,TextInput, StatusBar, Pressable } from 'react-native'
+import { View, SafeAreaView,Text,TextInput, StatusBar, Image,Pressable } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'twrnc'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigation().navigate;
   const [isChecked, setIsChecked] = useState(false)
   return (
-    <SafeAreaView style={tw`android:pt-[${StatusBar.currentHeight+10}px]  h-full flex-col pb-[${StatusBar.currentHeight}px] px-5 justify-between`}>
+    <SafeAreaView style={tw`android:pt-[${StatusBar.currentHeight+10}px] bg-white h-full flex-col pb-[${StatusBar.currentHeight}px] px-5 justify-between`}>
       <View style={tw`flex-col`}>
         <View style={tw`pb-10`}>
           <Text style={tw`capitalize font-bold text-2xl`}>Hi, welcome back!👋</Text>
@@ -27,7 +27,7 @@ const Login = () => {
           <View>
             <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Password</Text>
             <View style={tw`relative`}>
-              <TextInput secureTextEntry={!watch ? true : false} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your password'/>
+              <TextInput secureTextEntry={!watch} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your password'/>
               <MaterialCommunityIcons onPress={watchPassword}  style={tw`absolute right-2 top-[32%]`} size={22} name={!watch ? 'eye' : "eye-off"}/>
             </View>
           </View>
@@ -42,11 +42,21 @@ const Login = () => {
           <Text style={tw`px-3 text-gray-500 text-[15px] font-medium capitalize`}>or log in with</Text>
           <Divider style={tw`w-[40%] h-[2px]`}/>
         </View>
-        <View>
-          {/* <MaterialCommunityIcons name="google"/> */}
+        <View style={tw`flex-row justify-center`}>
+          <View style={tw`flex-row items-center border-2 border-solid border-gray-200 rounded-[10px] py-2 mr-5 px-8`}>
+            <Image style={tw`h-[40px] w-[40px]`} source={{uri: "https://www.facebook.com/images/fb_icon_325x325.png"}}/>
+            <Text style={tw`font-bold text-lg ml-2`}>Facebook</Text>
+          </View>
+         <View style={tw`flex-row items-center border-2 border-solid border-gray-200 rounded-[10px] py-2 px-8`}>
+          <Image
+          style={tw`h-[40px] w-[40px]`}
+          source={{uri:'https://staffordonline.org/wp-content/uploads/2019/01/Google.jpg'}}
+          />
+          <Text style={tw`font-bold text-lg ml-2`}>Google</Text>
+          </View>
         </View>
       </View>
-      <View style={tw`flex-row`}>
+      <View style={tw`flex-row justify-center`}>
         <Text style={tw`text-gray-500 pr-2 text-lg`}>Don't have an account?</Text>
         <Text onPress={() => navigate('signup')} style={tw`font-bold text-xl capitalize text-green-900`}>Sign up</Text>
       </View>

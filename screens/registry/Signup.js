@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import Checkbox from 'expo-checkbox';
 import { Button, Divider } from 'react-native-paper'
 import axios from 'axios'
+import myAxios from '../../axios'
 const Signup = () => {
   const [watch, setWatch] = useState(false);
   const watchPassword = () => {
@@ -23,6 +24,23 @@ const Signup = () => {
   const [selected, setSelected] = useState('+250')
   const navigate = useNavigation().navigate;
   const [isChecked, setIsChecked] = useState(false);
+  const [values, setValues] = useState({
+    email: "",
+    username: "",
+    password: "",
+    phone: ""
+  })
+  const handleChange = (text, mode) =>{
+    setValues({...values, [mode]: text});
+  }
+  const signup = async() =>{
+    try {
+      let response = await (await myAxios.post('/api/auth/signup', values)).data;
+      console.log(response)
+    } catch (error) {
+      
+    }
+  }
   return (
     <SafeAreaView style={tw`android:pt-[${StatusBar.currentHeight + 10}px] bg-white h-full flex-col pb-[${StatusBar.currentHeight}px] px-5 justify-between`}>
       <View style={tw`flex-col`}>
@@ -33,32 +51,40 @@ const Signup = () => {
         <View style={tw`flex-col`}>
           <View style={tw`mb-7`}>
             <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Email Address</Text>
-            <TextInput style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your email' />
+            <TextInput onChangeText={(text) => handleChange(text, 'email')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your email' />
           </View>
-          <View style={tw`mb-7`}>
+
+          <View>
+
           </View>
-          <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Mobile Number</Text>
-          <View style={tw`border-2 flex-row px-3 relative border-solid rounded-[10px] border-gray-500`}>
-            {select &&
-              <SafeAreaView style={tw.style(`bottom-14 bg-white absolute`)}>
-                {numss.map((num, index) => (
-                  <Pressable onPress={() => {
-                    setSelected(num);
-                    setSelect(false)
-                  }} key={index}><Text style={tw`text-lg font-medium`}>{num}</Text></Pressable>
-                ))}
-              </SafeAreaView>}
-            <Pressable onPress={() => setSelect(!select)}>
-              <View style={tw`border-r-2 border-solid border-gray-300 py-3 pr-2`}>
-                <Text>{selected}</Text>
-              </View>
-            </Pressable>
-            <TextInput style={tw`text-black py-2 px-5`} placeholder='Enter your mobile number' />
+          <View>
+            <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Mobile Number</Text>
+            <View style={tw`border-2 flex-row px-3 relative border-solid rounded-[10px] border-gray-500`}>
+              {select &&
+                <SafeAreaView style={tw.style(`bottom-14 bg-white absolute`)}>
+                  {numss.map((num, index) => (
+                    <Pressable onPress={() => {
+                      setSelected(num);
+                      setSelect(false)
+                    }} key={index}><Text style={tw`text-lg font-medium`}>{num}</Text></Pressable>
+                  ))}
+                </SafeAreaView>}
+              <Pressable onPress={() => setSelect(!select)}>
+                <View style={tw`border-r-2 border-solid border-gray-300 py-3 pr-2`}>
+                  <Text>{selected}</Text>
+                </View>
+              </Pressable>
+              <TextInput onChangeText={(text) => handleChange(text, 'phone')} style={tw`text-black py-2 px-5`} placeholder='Enter your mobile number' />
+            </View>
+          </View>
+          <View>
+              <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Username</Text>
+              <TextInput secureTextEntry={!watch} onChangeText={(text) => handleChange(text, 'username')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your username' />
           </View>
           <View>
             <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Password</Text>
             <View style={tw`relative`}>
-              <TextInput secureTextEntry={!watch} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your password' />
+              <TextInput secureTextEntry={!watch} onChangeText={(text) => handleChange(text, 'password')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your password' />
               <MaterialCommunityIcons onPress={watchPassword} style={tw`absolute right-2 top-[32%]`} size={22} name={!watch ? 'eye' : "eye-off"} />
             </View>
           </View>
@@ -66,7 +92,7 @@ const Signup = () => {
         <View style={tw`my-5 justify-between items-center flex-row`}>
           <Pressable onPress={() => setIsChecked(!isChecked)} style={tw`flex-row items-center`}><Checkbox color={isChecked && 'blue'} style={tw`h-5 w-5`} value={isChecked} /><Text style={tw`ml-2 font-semibold text-lg`}>I aggree to terms and conditions</Text></Pressable>
         </View>
-        <Button mode='contained' style={tw`bg-green-800 my-3`}>Signup</Button>
+        <Button mode='contained' onPress={signup} style={tw`bg-green-800 my-3`}>Signup</Button>
         <View style={tw`w-full py-3 items-center flex-row`}>
           <Divider style={tw`w-[35%] h-[2px]`} />
           <Text style={tw`px-3 text-gray-500 text-[15px] font-medium capitalize`}>or Sign up with</Text>

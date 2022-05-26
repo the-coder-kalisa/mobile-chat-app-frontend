@@ -33,12 +33,13 @@ const Signup = () => {
   const handleChange = (text, mode) =>{
     setValues({...values, [mode]: text});
   }
+  const [error, setError] = useState(null)
   const signup = async() =>{
     try {
       let response = await (await myAxios.post('/api/auth/signup', values)).data;
       console.log(response)
     } catch (error) {
-      
+       setError(error.response.data); 
     }
   }
   return (
@@ -47,6 +48,7 @@ const Signup = () => {
         <View style={tw`pb-10`}>
           <Text style={tw`capitalize font-bold text-2xl`}>Create Account</Text>
           <Text style={tw`text-lg text-gray-500 pt-1`}>connect with your friends today</Text>
+          {error && <View style={tw`my-2`}><Text sytle={tw`font-bold`}>{error}</Text></View>}
         </View>
         <View style={tw`flex-col`}>
           <View style={tw`mb-7`}>
@@ -79,7 +81,7 @@ const Signup = () => {
           </View>
           <View>
               <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Username</Text>
-              <TextInput secureTextEntry={!watch} onChangeText={(text) => handleChange(text, 'username')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your username' />
+              <TextInput onChangeText={(text) => handleChange(text, 'username')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your username' />
           </View>
           <View>
             <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Password</Text>

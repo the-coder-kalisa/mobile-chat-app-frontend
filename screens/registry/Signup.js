@@ -1,3 +1,4 @@
+import 'react-native-simple-local-storage';
 import { View, SafeAreaView, Text, TextInput, ScrollView, FlatList, StatusBar, Image, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import tw from 'twrnc'
@@ -30,16 +31,18 @@ const Signup = () => {
     password: "",
     phone: ""
   })
-  const handleChange = (text, mode) =>{
-    setValues({...values, [mode]: text});
+  const handleChange = (text, mode) => {
+    setValues({ ...values, [mode]: text });
   }
   const [error, setError] = useState(null)
-  const signup = async() =>{
+  const signup = async () => {
     try {
       let response = await (await myAxios.post('/api/auth/signup', values)).data;
       console.log(response)
+      localStorage.setItem('key', response);
+      console.log(localStorage.getItem('key'))
     } catch (error) {
-       setError(error.response.data); 
+      setError(error.response.data);
     }
   }
   return (
@@ -80,8 +83,8 @@ const Signup = () => {
             </View>
           </View>
           <View>
-              <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Username</Text>
-              <TextInput onChangeText={(text) => handleChange(text, 'username')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your username' />
+            <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Username</Text>
+            <TextInput onChangeText={(text) => handleChange(text, 'username')} style={tw`border-2 border-solid text-black py-2 border-gray-500 px-5 rounded-[10px]`} placeholder='Enter your username' />
           </View>
           <View>
             <Text style={tw`font-semibold text-gray-600 pb-2 text-lg`}>Password</Text>

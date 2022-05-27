@@ -3,10 +3,19 @@ import React, { useState } from 'react'
 import tw from 'twrnc'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'
+import 'react-native-simple-local-storage';
 import Checkbox from 'expo-checkbox';
 import { Button, Divider, Alert } from 'react-native-paper'
 import axios from '../../axios'
 const Login = () => {
+  const [isReady, setReady] = useState(false);
+  const [error, setError] = useState(null)
+  useEffect(() => {
+    global.localStorage.isReady.then(() => setReady(true));
+   }, []);
+  if (!isReady) {
+    return null;
+  }
   const [watch, setWatch] = useState(false);
   const watchPassword = () => {
     setWatch(!watch)
@@ -23,11 +32,11 @@ const Login = () => {
   const handleChange = (text, mode) => {
     setValues({ ...values, [mode]: text });
   }
-  const [error, setError] = useState(null)
   const hello = async () => {
     try {
       let response = await (await axios.post('/api/auth/login', values)).data;
-      localStorage.setItem('token', response);
+      localStorage.setItem('key', response);
+      console.log(localStorage.getItem('key'))
     } catch (error) {
       setError(error.response.data);
     }
